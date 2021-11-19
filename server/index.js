@@ -11,6 +11,8 @@ app.get('/', (req, res) => {
   res.send('Hello Worlds!');
 });
 
+app.get('/products/:product_id/related', requestHandler.getRelatedProducts);
+app.get('/products/:product_id', requestHandler.getProductInformation);
 app.get('/products/:page?/:count?', requestHandler.getProductsList);
 
 app.listen(port, () => {

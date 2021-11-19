@@ -10,6 +10,24 @@ const requestHandler = {
       }
     });
   },
+  getRelatedProducts: (req, res) => {
+    databaseQueryHandler.getRelatedProducts(req, (err, data) => {
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.send(data);
+      }
+    });
+  },
+  getProductInformation: (req, res) => {
+    databaseQueryHandler.getProductInformation(req, (err, data) => {
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.send(data);
+      }
+    });
+  },
 };
 
 module.exports.requestHandler = requestHandler;
