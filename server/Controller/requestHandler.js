@@ -28,6 +28,15 @@ const requestHandler = {
       }
     });
   },
+  getProductStyles: (req, res) => {
+    databaseQueryHandler.getProductStyles(req, (err, data) => {
+      if (err) {
+        res.sendStatus(400);
+      } else {
+        res.send(data);
+      }
+    });
+  },
 };
 
 module.exports.requestHandler = requestHandler;
