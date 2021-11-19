@@ -32,13 +32,13 @@ ALTER TABLE Features ADD FOREIGN KEY (product_id) REFERENCES Products (id);
 -- Styles
 
 CREATE TABLE Styles (
-  id INT NOT NULL AUTO_INCREMENT,
+  styles_id INT NOT NULL AUTO_INCREMENT,
   product_id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
-  sale_price INT NOT NULL,
   original_price INT NOT NULL,
+  sale_price INT NOT NULL,
   `default?` BOOLEAN NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (styles_id)
 );
 
 ALTER TABLE Styles ADD FOREIGN KEY (product_id) REFERENCES Products (id);
@@ -53,7 +53,7 @@ CREATE TABLE Photos (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE Photos ADD FOREIGN KEY (styles_id) REFERENCES Styles (id);
+ALTER TABLE Photos ADD FOREIGN KEY (styles_id) REFERENCES Styles (styles_id);
 
 -- SKUs
 
@@ -65,7 +65,7 @@ CREATE TABLE SKUs (
   PRIMARY KEY (id)
 );
 
-ALTER TABLE SKUs ADD FOREIGN KEY (styles_id) REFERENCES Styles (id);
+ALTER TABLE SKUs ADD FOREIGN KEY (styles_id) REFERENCES Styles (styles_id);
 
 -- Related Items
 
