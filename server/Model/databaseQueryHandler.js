@@ -48,18 +48,19 @@ const databaseQueryHandler = {
   },
 
   getProductStyles: (req, callback) => {
-    const reqParams = [req.params.product_id];
-    const mergedData = { product_id: reqParams[0], results: [] };
-    db.query('SELECT * FROM styles WHERE product_id = ?', reqParams, (stylesErr, stylesData) => {
-      if (stylesErr) {
-        callback(stylesErr, null);
-      } else {
-        mergedData.results.push(stylesData);
-        // db.query('SELECT * FROM SKUs WHERE')
-        console.log(mergedData);
-        callback(null, mergedData);
-      }
-    });
+    // const reqParams = ['default?', req.params.product_id];
+    // const mergedData = { product_id: reqParams[0], results: [] };
+    // db.query('SELECT styles_id, name, original_price, sale_price, default? FROM styles WHERE product_id = 1', reqParams, (stylesErr, stylesData) => {
+    //   if (stylesErr) {
+    //     console.log('i am here');
+    //     callback(stylesErr, null);
+    //   } else {
+    //     mergedData.results = stylesData;
+    //     // db.query('SELECT * FROM SKUs WHERE')
+    //     console.log(mergedData);
+    //     callback(null, mergedData);
+    //   }
+    // });
   },
 };
 

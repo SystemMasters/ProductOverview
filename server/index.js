@@ -19,3 +19,5 @@ app.get('/products/:page?/:count?', requestHandler.getProductsList);
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+module.exports = app;
