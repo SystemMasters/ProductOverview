@@ -2,7 +2,6 @@ const { databaseQueryHandler } = require('../Model');
 
 const requestHandler = {
   getProductsList: (req, res) => {
-    console.log('here');
     databaseQueryHandler.getProductsList(req, (err, data) => {
       if (err) {
         res.sendStatus(400);

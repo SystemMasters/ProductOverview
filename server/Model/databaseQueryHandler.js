@@ -1,3 +1,7 @@
+/* eslint-disable max-len */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-param-reassign */
+/* eslint-disable array-callback-return */
 const db = require('../../db').dbConnection;
 
 const databaseQueryHandler = {
@@ -5,62 +9,121 @@ const databaseQueryHandler = {
     const upper = req.query.page * req.query.count;
     const lower = upper - req.query.count + 1;
     const reqParams = Object.keys(req.query).length === 0 ? [1, 5] : [lower, upper];
-    db.query('SELECT * FROM products WHERE id >= ? AND id <= ?', reqParams, (err, data) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, data);
-      }
-    });
+    const query = 'SELECT * FROM products WHERE id >= ? AND id <= ?';
+    // ------------------- error first callback -------------------------
+    // db.query(query, reqParams, (err, data) => {
+    //   if (err) {
+    //     callback(err, null);
+    //   } else {
+    //     callback(null, data);
+    //   }
+    // });
+    // ------------------- promises ------------------------------------
+    db.promise().query(query, reqParams)
+      .then((data) => callback(null, data[0]))
+      .catch((err) => callback(err, null));
   },
 
   getRelatedProducts: (req, callback) => {
     const reqParams = [req.params.product_id];
-    db.query('SELECT relateditem_id FROM RelatedItems WHERE product_id = ?', reqParams, (err, data) => {
-      const sortedData = data.map((entry) => entry.relateditem_id);
-      if (err) {
-        callback(err, null);
-      } else if (sortedData.length === 0) {
-        callback(400, null);
-      } else {
+    const query = 'SELECT relateditem_id FROM RelatedItems WHERE product_id = ?';
+    // ------------------- error first callback -------------------------
+    // db.query(query, reqParams, (err, data) => {
+    //   const sortedData = data.map((entry) => entry.relateditem_id);
+    //   if (err) {
+    //     callback(err, null);
+    //   } else if (sortedData.length === 0) {
+    //     callback(400, null);
+    //   } else {
+    //     callback(null, sortedData);
+    //   }
+    // });
+    // ------------------- promises ------------------------------------
+    db.promise().query(query, reqParams)
+      .then((data) => {
+        const sortedData = data[0].map((entry) => entry.relateditem_id);
         callback(null, sortedData);
-      }
-    });
+      })
+      .catch((err) => callback(err, null));
   },
 
   getProductInformation: (req, callback) => {
     const reqParams = [req.params.product_id];
-    db.query('SELECT * FROM products where id = ?', reqParams, (productErr, productData) => {
-      if (productErr) {
-        callback(productErr, null);
-      } else {
-        const mergedData = productData;
-        db.query('SELECT * FROM features WHERE product_id = ? ', reqParams, (featuresErr, featuresData) => {
-          mergedData[0].features = featuresData;
-          if (featuresErr) {
-            callback(featuresErr, null);
-          } else {
-            callback(null, productData);
-          }
-        });
-      }
-    });
+    const productQuery = 'SELECT * FROM products where id = ?';
+    const featuresQuery = 'SELECT feature, value FROM features WHERE product_id = ?';
+    // ------------------- error first callback -------------------------
+    // db.query(productQuery, reqParams, (productErr, productData) => {
+    //   if (productErr) {
+    //     callback(productErr, null);
+    //   } else {
+    //     const mergedData = productData[0];
+    //     db.query(featuresQuery, reqParams, (featuresErr, featuresData) => {
+    //       console.log(mergedData);
+    //       mergedData.features = featuresData;
+    //       if (featuresErr) {
+    //         callback(featuresErr, null);
+    //       } else {
+    //         callback(null, mergedData);
+    //       }
+    //     });
+    //   }
+    // });
+    // ------------------- promises ------------------------------------
+    db.promise().query(productQuery, reqParams)
+      .then((productData) => db.promise().query(featuresQuery, reqParams)
+        .then((featuresData) => {
+          const mergedData = productData[0][0];
+          [featuresData] = featuresData;
+          mergedData.features = featuresData;
+          callback(null, mergedData);
+        })
+        .catch((err) => callback(err, null)));
   },
 
   getProductStyles: (req, callback) => {
-    // const reqParams = ['default?', req.params.product_id];
-    // const mergedData = { product_id: reqParams[0], results: [] };
-    // db.query('SELECT styles_id, name, original_price, sale_price, default? FROM styles WHERE product_id = 1', reqParams, (stylesErr, stylesData) => {
-    //   if (stylesErr) {
-    //     console.log('i am here');
-    //     callback(stylesErr, null);
-    //   } else {
-    //     mergedData.results = stylesData;
-    //     // db.query('SELECT * FROM SKUs WHERE')
-    //     console.log(mergedData);
-    //     callback(null, mergedData);
-    //   }
-    // });
+    const reqParams = [req.params.product_id];
+    // const stylesId = [style.styles_id];
+    const stylesQuery = 'SELECT * FROM styles WHERE product_id = ?';
+    const photosQuery = 'SELECT thumbnail_url, url FROM photos WHERE styles_id = ?';
+    const skusQuery = 'SELECT id, quantity, size FROM SKUs WHERE styles_id = ?';
+    const mergedData = { product_id: reqParams[0], results: [] };
+    db.promise().query(stylesQuery, reqParams)
+      // .then((stylesData) => {
+      //   console.log(stylesData);
+      //   const stylesId = [stylesData[0][0].styles_id];
+      //   console.log(stylesId);
+      // })
+      .then((stylesData) => stylesData[0].forEach((style) => {
+        style.photos = [];
+        style.skus = {};
+        db.promise().query(photosQuery, [style.styles_id])
+          .then((photosData) => db.promise().query(skusQuery, [style.styles_id])
+            .then((skusData) => {
+              const photo = photosData[0];
+              style.photos = photo;
+              skusData[0].forEach((sku) => { style.skus[sku.id] = { quantity: sku.quantity, size: sku.size }; });
+              mergedData.results.push(style);
+              if (mergedData.results.length === stylesData[0].length) {
+                callback(null, mergedData);
+              }
+            }));
+      })
+        .catch((err) => callback(err, null)));
+  //       mergedData.results = stylesData;
+  //       mergedData.results.map((style) => {
+  //         const stylesId = [style.styles_id];
+  //         db.query('SELECT quantity, size FROM SKUs WHERE styles_id = ?', stylesId, (SKUsErr, SKUData) => {
+  //           style.skus = SKUData;
+  //           console.log(style);
+  //           // mergedData.results.map((style) => {
+  //           //   // delete style.product_id;
+  //           //   style['default?'] === 1 ? style['default?'] = true : style['default?'] = false;
+  //           // });
+  //         });
+  //       });
+  //     }
+  //     callback(null, mergedData);
+  //   });
   },
 };
 
