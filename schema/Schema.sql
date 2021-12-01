@@ -1,5 +1,5 @@
 
--- run 'myslq -u root < schema/Schema.sql;'
+-- run 'mysql -u root < schema/Schema.sql;'
 
 DROP DATABASE IF EXISTS PRODUCTOVERVIEW;
 CREATE DATABASE PRODUCTOVERVIEW;
@@ -78,9 +78,9 @@ CREATE TABLE RelatedItems (
 
 ALTER TABLE RelatedItems ADD FOREIGN KEY (product_id) REFERENCES Products (id);
 
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/product.csv' INTO TABLE Products FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/features.csv' INTO TABLE Features FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/styles.csv' INTO TABLE Styles FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/photos.csv' INTO TABLE Photos FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/skus.csv' INTO TABLE SKUs FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
--- LOAD DATA LOCAL INFILE '/Users/juliehwang/Documents/HackReactor/ProductOverviewDataCenter/Data/related.csv' INTO TABLE RelatedItems FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/product.csv' INTO TABLE Products FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/features.csv' INTO TABLE Features FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/styles.csv' INTO TABLE Styles FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/photos.csv' INTO TABLE Photos FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/skus.csv' INTO TABLE SKUs FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
+-- LOAD DATA LOCAL INFILE '/Users/yoseobkim/Documents/HackReactor/immersive/seniorPhase/ProductOverviewDataCenter/Data/related.csv' INTO TABLE RelatedItems FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;
