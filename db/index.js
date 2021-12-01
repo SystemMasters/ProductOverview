@@ -1,11 +1,7 @@
 const mysql = require('mysql2');
+const { dbInfo } = require('../config');
 
-const dbConnection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'PRODUCTOVERVIEW',
-});
+const dbConnection = mysql.createConnection(dbInfo);
 
 dbConnection.connect((err) => {
   if (err) {
