@@ -9,7 +9,7 @@ const databaseQueryHandler = {
     const upper = req.query.page * req.query.count;
     const lower = upper - req.query.count + 1;
     const reqParams = Object.keys(req.query).length === 0 ? [1, 5] : [lower, upper];
-    const query = 'SELECT * FROM products WHERE id >= ? AND id <= ?';
+    const query = 'SELECT * FROM Products WHERE id >= ? AND id <= ?';
     // ------------------- error first callback -------------------------
     // db.query(query, reqParams, (err, data) => {
     //   if (err) {
@@ -49,8 +49,8 @@ const databaseQueryHandler = {
 
   getProductInformation: (req, callback) => {
     const reqParams = [req.params.product_id];
-    const productQuery = 'SELECT * FROM products where id = ?';
-    const featuresQuery = 'SELECT feature, value FROM features WHERE product_id = ?';
+    const productQuery = 'SELECT * FROM Products WHERE id = ?';
+    const featuresQuery = 'SELECT feature, value FROM Features WHERE product_id = ?';
     // ------------------- error first callback -------------------------
     // db.query(productQuery, reqParams, (productErr, productData) => {
     //   if (productErr) {
@@ -83,8 +83,8 @@ const databaseQueryHandler = {
   getProductStyles: (req, callback) => {
     const reqParams = [req.params.product_id];
     // const stylesId = [style.styles_id];
-    const stylesQuery = 'SELECT * FROM styles WHERE product_id = ?';
-    const photosQuery = 'SELECT thumbnail_url, url FROM photos WHERE styles_id = ?';
+    const stylesQuery = 'SELECT * FROM Styles WHERE product_id = ?';
+    const photosQuery = 'SELECT thumbnail_url, url FROM Photos WHERE styles_id = ?';
     const skusQuery = 'SELECT id, quantity, size FROM SKUs WHERE styles_id = ?';
     const mergedData = { product_id: reqParams[0], results: [] };
     db.promise().query(stylesQuery, reqParams)
