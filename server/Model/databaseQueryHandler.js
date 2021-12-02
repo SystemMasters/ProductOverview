@@ -107,8 +107,8 @@ const databaseQueryHandler = {
                 callback(null, mergedData);
               }
             }));
-      })
-        .catch((err) => callback(err, null)));
+      }))
+      .catch((err) => callback(err, null));
   //       mergedData.results = stylesData;
   //       mergedData.results.map((style) => {
   //         const stylesId = [style.styles_id];
